@@ -1,0 +1,42 @@
+{"properties": [
+  {
+    "name": "app.onboarding.api.url",
+    "type": "java.lang.String",
+    "description": "A description for 'app.onboarding.api.url'"
+  },
+  {
+    "name": "app.onboarding.api.username",
+    "type": "java.lang.String",
+    "description": "A description for 'app.onboarding.api.username'"
+  },
+  {
+    "name": "app.onboarding.api.password",
+    "type": "java.lang.String",
+    "description": "A description for 'app.onboarding.api.password'"
+  },
+  {
+    "name": "app.retry.max-attempts",
+    "type": "java.lang.String",
+    "description": "A description for 'app.retry.max-attempts'"
+  },
+  {
+    "name": "app.ratelimit.limit",
+    "type": "java.lang.String",
+    "description": "A description for 'app.ratelimit.limit'"
+  },
+  {
+    "name": "app.ratelimit.refresh-period",
+    "type": "java.lang.String",
+    "description": "A description for 'app.ratelimit.refresh-period'"
+  },
+  {
+    "name": "app.notification.emails",
+    "type": "java.lang.String",
+    "description": "A description for 'app.notification.emails'"
+  },
+  {
+    "name": "app.retry.delay-time",
+    "type": "java.lang.String",
+    "description": "A description for 'app.retry.delay-time'"
+  }
+]}
