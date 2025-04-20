@@ -2,5 +2,5 @@ package br.com.onboarding.integration.enumeration;
 
 public enum FetchStatus {
     SUCESSO,
-    ERRO
+    FALHA
 }

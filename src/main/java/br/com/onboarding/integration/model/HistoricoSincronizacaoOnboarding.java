@@ -35,19 +35,9 @@ public class HistoricoSincronizacaoOnboarding {
     @Column(name = "mensagem_erro", length = 1000)
     private String mensagemErro;
 
-    @Column(nullable = false)
-    private Integer tentativa;
-    
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-    
-    @Column(name = "created_by", length = 100)
-    private String createdBy;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        createdBy = "tenissonjr"; // Current user
         dataHora = LocalDateTime.now();
     }
 
@@ -91,28 +81,5 @@ public class HistoricoSincronizacaoOnboarding {
         this.mensagemErro = mensagemErro;
     }
 
-    public Integer getTentativa() {
-        return tentativa;
-    }
-
-    public void setTentativa(Integer tentativa) {
-        this.tentativa = tentativa;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
     
 }
