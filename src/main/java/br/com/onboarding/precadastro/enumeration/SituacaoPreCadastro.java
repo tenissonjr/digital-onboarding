@@ -1,7 +1,7 @@
 package br.com.onboarding.precadastro.enumeration;
 
 public enum SituacaoPreCadastro {
-    EM_PROCESSAMENTO,
+    PENDENTE_VALIDACAO,
     VALIDADO_SUCESSO,
     VALIDACAO_COM_ERROS
 }

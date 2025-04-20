@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.onboarding.integration.dto.OnboardingDataDto;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -85,7 +86,7 @@ public class PreCadastro {
     protected void onCreate() {
         dataNotificacao = LocalDateTime.now();
         if (situacao == null) {
-            situacao = SituacaoPreCadastro.EM_PROCESSAMENTO;
+            situacao = SituacaoPreCadastro.PENDENTE_VALIDACAO;
         }
     }
 
@@ -229,6 +230,27 @@ public class PreCadastro {
 
     public void setValidationErrors(List<ValidacaoPreCadastro> validationErrors) {
         this.validationErrors = validationErrors;
+    }
+
+    public static PreCadastro valueOf(OnboardingDataDto dto) {
+        PreCadastro preCadastro = new PreCadastro();
+        preCadastro.setHash(dto.hash());
+        preCadastro.setCpf(dto.cpf());
+        preCadastro.setNome(dto.nome());
+        preCadastro.setNomeSocial(dto.nomeSocial());
+        preCadastro.setDataNascimento(dto.dataNascimento());
+        preCadastro.setNomeMae(dto.nomeMae());
+        preCadastro.setNumeroDocumento(dto.numeroDocumento());
+        preCadastro.setPaisOrigem(dto.paisOrigem());
+        preCadastro.setOrgaoEmissor(dto.orgaoEmissor());
+        preCadastro.setUf(dto.uf());
+        preCadastro.setDataExpedicao(dto.dataExpedicao());
+        preCadastro.setDataVencimento(dto.dataVencimento());
+        preCadastro.setDataRecebimento(LocalDateTime.now());
+        preCadastro.setSituacao(SituacaoPreCadastro.PENDENTE_VALIDACAO);
+
+
+        return  preCadastro;
     }
 
     

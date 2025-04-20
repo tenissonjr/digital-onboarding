@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
+import br.com.onboarding.integration.dto.OnboardingDataDto;
 import br.com.onboarding.integration.model.NotificacaoOnboarding;
 import br.com.onboarding.integration.repository.NotificacaoOnboardingRepository;
 
@@ -45,8 +46,11 @@ public class NotificacaoOnboardingService {
 
     }
 
-    private void atualizarNotificacao(Object hash) {
-        Optional<NotificacaoOnboarding> notificacaoOptional = notificacaoOnboardingRepository.findByHash(hash.toString());
+    private void atualizarNotificacao(Object onboardingDataDto) {
+
+        OnboardingDataDto dto = (OnboardingDataDto) onboardingDataDto;
+
+        Optional<NotificacaoOnboarding> notificacaoOptional = notificacaoOnboardingRepository.findByHash(dto.hash());
         if (notificacaoOptional.isPresent()) {
             NotificacaoOnboarding notificacao = notificacaoOptional.get();
             notificacao.setDataRecebimento(LocalDateTime.now());
