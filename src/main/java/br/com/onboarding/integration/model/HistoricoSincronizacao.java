@@ -3,7 +3,7 @@ package br.com.onboarding.integration.model;
 
 import java.time.LocalDateTime;
 
-import br.com.onboarding.integration.enumeration.FetchStatus;
+import br.com.onboarding.integration.enumeration.SituacaoHistoricoSincronizacao;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "HISTORICO_SINCRONIZACAO_ONBOARDING")
-public class HistoricoSincronizacaoOnboarding {
+public class HistoricoSincronizacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class HistoricoSincronizacaoOnboarding {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private FetchStatus status;
+    private SituacaoHistoricoSincronizacao situacao;
 
     @Column(name = "mensagem_erro", length = 1000)
     private String mensagemErro;
@@ -65,13 +65,6 @@ public class HistoricoSincronizacaoOnboarding {
         this.dataHora = dataHora;
     }
 
-    public FetchStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(FetchStatus status) {
-        this.status = status;
-    }
 
     public String getMensagemErro() {
         return mensagemErro;
@@ -79,6 +72,14 @@ public class HistoricoSincronizacaoOnboarding {
 
     public void setMensagemErro(String mensagemErro) {
         this.mensagemErro = mensagemErro;
+    }
+
+    public SituacaoHistoricoSincronizacao getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(SituacaoHistoricoSincronizacao situacao) {
+        this.situacao = situacao;
     }
 
     

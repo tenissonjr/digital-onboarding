@@ -9,7 +9,8 @@ CREATE TABLE NOTIFICACAO_ONBOARDING (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     hash VARCHAR(64) UNIQUE NOT NULL,
     data_notificacao TIMESTAMP NOT NULL,    
-    data_recebimento TIMESTAMP 
+    data_recebimento TIMESTAMP ,
+    situacao VARCHAR(20) NOT NULL
 );
 -- Add indexes
 CREATE INDEX idx_NOTIFICACAO_hash ON NOTIFICACAO_ONBOARDING(hash);
@@ -19,8 +20,8 @@ CREATE TABLE HISTORICO_SINCRONIZACAO_ONBOARDING (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     hash VARCHAR(64) NOT NULL,
     data_hora TIMESTAMP NOT NULL,
-    status VARCHAR(10) NOT NULL,
-    mensagem_erro VARCHAR(1000)
+    situacao VARCHAR(10) NOT NULL,
+    mensagem_erro VARCHAR(5000)
 
 );
 CREATE INDEX idx_HISTORICO_SINCRONIZACAO_ONBOARDING_hash ON HISTORICO_SINCRONIZACAO_ONBOARDING(hash);
@@ -42,8 +43,8 @@ CREATE TABLE PRECADASTRO (
     data_expedicao DATE,
     data_vencimento DATE,
     situacao VARCHAR(20) NOT NULL,
-    data_notificacao TIMESTAMP NOT NULL,    
-    data_recebimento TIMESTAMP 
+    data_cadastro TIMESTAMP ,
+    data_validacao TIMESTAMP 
 
 );
 -- Add indexes

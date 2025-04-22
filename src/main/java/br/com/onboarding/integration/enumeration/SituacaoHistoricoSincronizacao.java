@@ -1,6 +1,6 @@
 package br.com.onboarding.integration.enumeration;
 
-public enum FetchStatus {
+public enum SituacaoHistoricoSincronizacao {
     SUCESSO,
     FALHA
 }

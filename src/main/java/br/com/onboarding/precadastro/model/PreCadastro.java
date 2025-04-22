@@ -18,8 +18,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -70,30 +68,16 @@ public class PreCadastro {
     @Column(nullable = false)
     private SituacaoPreCadastro situacao;
 
-    @Column(name = "data_notificacao")
-    private LocalDateTime dataNotificacao;
+    @Column(name = "data_cadastro", nullable = false)
+    private LocalDateTime dataCadastro;
 
-    @Column(name = "data_recebimento", nullable = false)
-    private LocalDateTime dataRecebimento;
-
+    @Column(name = "data_validacao")
+    private LocalDateTime dataValidacao;
     
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "onboarding_data_id")
     private List<ValidacaoPreCadastro> validationErrors = new ArrayList<>();
-
-    @PrePersist
-    protected void onCreate() {
-        dataNotificacao = LocalDateTime.now();
-        if (situacao == null) {
-            situacao = SituacaoPreCadastro.PENDENTE_VALIDACAO;
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        dataRecebimento = LocalDateTime.now();
-    }
 
     public Long getId() {
         return id;
@@ -207,20 +191,12 @@ public class PreCadastro {
         this.situacao = status;
     }
 
-    public LocalDateTime getDataRecebimento() {
-        return dataRecebimento;
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
     }
 
-    public void setDataRecebimento(LocalDateTime dataRecebimento) {
-        this.dataRecebimento = dataRecebimento;
-    }
-
-    public LocalDateTime getDataNotificacao() {
-        return dataNotificacao;
-    }
-
-    public void setDataNotificacao(LocalDateTime dataProcessamento) {
-        this.dataNotificacao = dataProcessamento;
+    public void setDataCadastro(LocalDateTime dataRecebimento) {
+        this.dataCadastro = dataRecebimento;
     }
 
 
@@ -232,6 +208,15 @@ public class PreCadastro {
         this.validationErrors = validationErrors;
     }
 
+    public LocalDateTime getDataValidacao() {
+        return dataValidacao;
+    }
+
+    public void setDataValidacao(LocalDateTime dataValidacao) {
+        this.dataValidacao = dataValidacao;
+    }
+
+    
     public static PreCadastro valueOf(OnboardingDataDto dto) {
         PreCadastro preCadastro = new PreCadastro();
         preCadastro.setHash(dto.hash());
@@ -246,12 +231,13 @@ public class PreCadastro {
         preCadastro.setUf(dto.uf());
         preCadastro.setDataExpedicao(dto.dataExpedicao());
         preCadastro.setDataVencimento(dto.dataVencimento());
-        preCadastro.setDataRecebimento(LocalDateTime.now());
+        preCadastro.setDataCadastro(LocalDateTime.now());
         preCadastro.setSituacao(SituacaoPreCadastro.PENDENTE_VALIDACAO);
 
 
         return  preCadastro;
     }
+
 
     
 }

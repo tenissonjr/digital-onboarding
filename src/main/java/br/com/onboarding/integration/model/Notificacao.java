@@ -2,8 +2,11 @@ package br.com.onboarding.integration.model;
 
 import java.time.LocalDateTime;
 
+import br.com.onboarding.integration.enumeration.SituacaoSincronizacao;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "NOTIFICACAO_ONBOARDING")
-public class NotificacaoOnboarding {
+public class Notificacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +30,10 @@ public class NotificacaoOnboarding {
 
     @Column(name = "data_recebimento", nullable = false)
     private LocalDateTime dataRecebimento;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SituacaoSincronizacao situacao= SituacaoSincronizacao.PENDENTE;
 
 
     @PrePersist
@@ -69,6 +76,14 @@ public class NotificacaoOnboarding {
 
     public void setDataRecebimento(LocalDateTime dataRecebimento) {
         this.dataRecebimento = dataRecebimento;
+    }
+
+    public SituacaoSincronizacao getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(SituacaoSincronizacao status) {
+        this.situacao = status;
     }
 
 
