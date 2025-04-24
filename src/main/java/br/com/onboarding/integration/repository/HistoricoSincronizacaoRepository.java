@@ -24,7 +24,7 @@ public interface HistoricoSincronizacaoRepository extends JpaRepository<Historic
      */
     List<HistoricoSincronizacao> findBySituacao(SituacaoHistoricoSincronizacao situacao);
 
-    long countBySituacaoAndDataHoraBetween(SituacaoSincronizacao status, LocalDateTime startTime,
+    long countBySituacaoAndDataHoraBetween(SituacaoHistoricoSincronizacao status, LocalDateTime startTime,
             LocalDateTime endTime);
 
 }

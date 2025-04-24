@@ -4,6 +4,7 @@ package br.com.onboarding.integration.dto;
 import java.util.List;
 import java.util.Map;
 
+import br.com.onboarding.integration.enumeration.SituacaoHistoricoSincronizacao;
 import br.com.onboarding.integration.enumeration.SituacaoSincronizacao;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 
@@ -15,7 +16,7 @@ public class EstatisticasDTO {
 
     public static class TimePeriodStats {
         private String periodo; // Ex: "Última Hora", "Penúltima Hora"
-        private Map<SituacaoSincronizacao, Long> totaisSituacoesSincronizacao;
+        private Map<SituacaoHistoricoSincronizacao, Long> totaisSituacoesSincronizacao;
         private Map<SituacaoPreCadastro, Long> totaisSituacoesPreCadastro;
         public String getPeriodo() {
             return periodo;
@@ -23,10 +24,10 @@ public class EstatisticasDTO {
         public void setPeriodo(String periodo) {
             this.periodo = periodo;
         }
-        public Map<SituacaoSincronizacao, Long> getTotaisSituacoesSincronizacao() {
+        public Map<SituacaoHistoricoSincronizacao, Long> getTotaisSituacoesSincronizacao() {
             return totaisSituacoesSincronizacao;
         }
-        public void setTotaisSituacoesSincronizacao(Map<SituacaoSincronizacao, Long> totaisSituacoesSincronizacao) {
+        public void setTotaisSituacoesSincronizacao(Map<SituacaoHistoricoSincronizacao, Long> totaisSituacoesSincronizacao) {
             this.totaisSituacoesSincronizacao = totaisSituacoesSincronizacao;
         }
         public Map<SituacaoPreCadastro, Long> getTotaisSituacoesPreCadastro() {

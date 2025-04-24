@@ -14,6 +14,7 @@ import br.com.onboarding.integration.dto.EstatisticasDTO;
 import br.com.onboarding.integration.dto.EstatisticasDTO.TimePeriodStats;
 import br.com.onboarding.integration.dto.EstatisticasParamDTO;
 import br.com.onboarding.integration.dto.EstatisticasParamDTO.TimeUnit;
+import br.com.onboarding.integration.enumeration.SituacaoHistoricoSincronizacao;
 import br.com.onboarding.integration.enumeration.SituacaoSincronizacao;
 import br.com.onboarding.integration.repository.HistoricoSincronizacaoRepository;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
@@ -44,9 +45,9 @@ public class EstatisticasNotificacaoService {
         };
     }
 
-    private Map<SituacaoSincronizacao, Long> obterEstatisticasSincronizacao(LocalDateTime startTime, LocalDateTime endTime) {
-        Map<SituacaoSincronizacao, Long> estatisticas = new EnumMap<>(SituacaoSincronizacao.class);
-        for (SituacaoSincronizacao status : SituacaoSincronizacao.values()) {
+    private Map<SituacaoHistoricoSincronizacao, Long> obterEstatisticasSincronizacao(LocalDateTime startTime, LocalDateTime endTime) {
+        Map<SituacaoHistoricoSincronizacao, Long> estatisticas = new EnumMap<>(SituacaoHistoricoSincronizacao.class);
+        for (SituacaoHistoricoSincronizacao status : SituacaoHistoricoSincronizacao.values()) {
             long count = historicoSincronizacaoRepository.countBySituacaoAndDataHoraBetween(status, startTime, endTime);
             estatisticas.put(status, count);
         }
@@ -63,14 +64,14 @@ public class EstatisticasNotificacaoService {
             LocalDateTime startTime = calculateStartTime(now, param.unit(), i + 1);
             LocalDateTime endTime = calculateStartTime(now, param.unit(), i);
 
-            Map<SituacaoSincronizacao, Long> totaisSituacaoSincronizacao = obterEstatisticasSincronizacao(startTime, endTime);
+            Map<SituacaoHistoricoSincronizacao, Long> totaisSituacaoSincronizacao = obterEstatisticasSincronizacao(startTime, endTime);
             Map<SituacaoPreCadastro, Long> totaisSituacaoPreCadastro = preCadastroService.obterEstatisticasPreCadastro(startTime, endTime);
 
 
             TimePeriodStats stats = new TimePeriodStats();
             stats.setPeriodo(formatPeriodLabel(param.unit(), i));
             stats.setTotaisSituacoesSincronizacao(totaisSituacaoSincronizacao);
-            stats.setTotaisSituacoesPreCadastro(totaisSituacaoPreCadastro);
+           stats.setTotaisSituacoesPreCadastro(totaisSituacaoPreCadastro);
 
             timePeriodStatsList.add(stats);
 
