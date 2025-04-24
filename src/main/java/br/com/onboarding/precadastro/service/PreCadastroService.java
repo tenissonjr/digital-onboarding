@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
-import br.com.onboarding.integration.dto.OnboardingDataDto;
+import br.com.onboarding.integracao.dto.OnboardingDataDto;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 import br.com.onboarding.precadastro.model.PreCadastro;
 import br.com.onboarding.precadastro.repository.PreCadastroRepository;

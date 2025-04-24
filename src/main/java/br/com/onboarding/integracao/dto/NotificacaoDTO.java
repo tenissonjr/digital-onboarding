@@ -1,8 +1,8 @@
-package br.com.onboarding.integration.dto;
+package br.com.onboarding.integracao.dto;
 
 import java.time.LocalDateTime;
 
-import br.com.onboarding.integration.model.Notificacao;
+import br.com.onboarding.integracao.model.Notificacao;
 
 public record NotificacaoDTO(
     String hash,
@@ -12,8 +12,8 @@ public record NotificacaoDTO(
     public NotificacaoDTO(Notificacao notificacao) {
         this(
             notificacao.getHash(),
-            notificacao.getDataNotificacao(),
-            notificacao.getDataRecebimento()
+            notificacao.getDataHoraNotificacao(),
+            notificacao.getDataHoraSincronizacao()
         );
     }    
 }

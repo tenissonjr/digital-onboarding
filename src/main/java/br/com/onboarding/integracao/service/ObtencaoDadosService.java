@@ -1,4 +1,4 @@
-package br.com.onboarding.integration.service;
+package br.com.onboarding.integracao.service;
 
 import java.time.LocalDateTime;
 
@@ -7,14 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.onboarding.infraestructure.exception.OnboardingServiceException;
+import br.com.onboarding.infraestructure.exception.IntegracaoOnboardingServiceException;
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
-import br.com.onboarding.integration.dto.OnboardingDataDto;
-import br.com.onboarding.integration.enumeration.SituacaoHistoricoSincronizacao;
-import br.com.onboarding.integration.model.HistoricoSincronizacao;
-import br.com.onboarding.integration.port.IFetchingOnboardDataService;
-import br.com.onboarding.integration.repository.HistoricoSincronizacaoRepository;
+import br.com.onboarding.integracao.dto.OnboardingDataDto;
+import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
+import br.com.onboarding.integracao.model.HistoricoSincronizacao;
+import br.com.onboarding.integracao.port.IIntegracaoOnboardDigitalService;
+import br.com.onboarding.integracao.repository.HistoricoSincronizacaoRepository;
 
 @Service
 public class ObtencaoDadosService {
@@ -24,12 +24,12 @@ public class ObtencaoDadosService {
 
     private final IMessageBroker messageBroker;
 
-    private final IFetchingOnboardDataService fetchingOnboardDataService;
+    private final IIntegracaoOnboardDigitalService fetchingOnboardDataService;
 
     private final HistoricoSincronizacaoRepository historicoSincronizacaoOnboardingRepository;
 
     
-    public ObtencaoDadosService(IMessageBroker messageBroker, IFetchingOnboardDataService fetchingOnboardDataService,
+    public ObtencaoDadosService(IMessageBroker messageBroker, IIntegracaoOnboardDigitalService fetchingOnboardDataService,
             HistoricoSincronizacaoRepository historicoSincronizacaoOnboardingRepository) {
         this.fetchingOnboardDataService = fetchingOnboardDataService;
         this.messageBroker = messageBroker;
@@ -45,17 +45,17 @@ public class ObtencaoDadosService {
         historico.setHash(hash.toString());
         
         try {
-            OnboardingDataDto dto = fetchingOnboardDataService.fetchOnboardingData(hash);
+            OnboardingDataDto dto = fetchingOnboardDataService.obterDadosPessoais(hash);
             this.messageBroker.publish(MessageTopic.DADOS_OBTIDOS, dto);        
-            historico.setSituacao(SituacaoHistoricoSincronizacao.SUCESSO);
+            historico.setSituacao(SituacaoSincronizacaoEnum.SUCESSO_SINCRONIZACAO);
             log.info("Dados de onboarding obtidos com sucesso para o hash: {}", hashStr);
-        } catch (OnboardingServiceException e) {
+        } catch (IntegracaoOnboardingServiceException e) {
             log.error("Erro ao obter dados de onboarding para o hash {}: {}", hashStr, e.getMessage());
-            historico.setSituacao(SituacaoHistoricoSincronizacao.FALHA);
+            historico.setSituacao(SituacaoSincronizacaoEnum.FALHA_SINCRONIZACAO);
             historico.setMensagemErro(e.getMessage());
         } catch (Exception e) {
             log.error("Erro inesperado ao obter dados de onboarding para o hash {}: {}", hashStr, e.getMessage(), e);
-            historico.setSituacao(SituacaoHistoricoSincronizacao.FALHA);
+            historico.setSituacao(SituacaoSincronizacaoEnum.FALHA_SINCRONIZACAO);
             historico.setMensagemErro("Erro inesperado: " + e.getMessage());
         } finally {
             historico.setDataHora(LocalDateTime.now());

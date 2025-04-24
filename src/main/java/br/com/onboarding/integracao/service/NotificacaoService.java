@@ -1,4 +1,4 @@
-package br.com.onboarding.integration.service;
+package br.com.onboarding.integracao.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,20 +8,26 @@ import org.springframework.stereotype.Service;
 
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
-import br.com.onboarding.integration.dto.NotificacaoDTO;
-import br.com.onboarding.integration.dto.OnboardingDataDto;
-import br.com.onboarding.integration.model.Notificacao;
-import br.com.onboarding.integration.repository.NotificacaoRepository;
+import br.com.onboarding.integracao.dto.NotificacaoDTO;
+import br.com.onboarding.integracao.dto.OnboardingDataDto;
+import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
+import br.com.onboarding.integracao.model.HistoricoSincronizacao;
+import br.com.onboarding.integracao.model.Notificacao;
+import br.com.onboarding.integracao.repository.HistoricoSincronizacaoRepository;
+import br.com.onboarding.integracao.repository.NotificacaoRepository;
 
 @Service
 public class NotificacaoService {
 
-    private final NotificacaoRepository notificacaoRepository;
     private final IMessageBroker messageBroker;
+    private final NotificacaoRepository notificacaoRepository;
+    private final HistoricoSincronizacaoRepository historicoSincronizacaoRepository;
     
-    public NotificacaoService(NotificacaoRepository notificacaoRepository, IMessageBroker messageBroker) {
-        this.notificacaoRepository = notificacaoRepository;
+    public NotificacaoService( IMessageBroker messageBroker,NotificacaoRepository notificacaoRepository,HistoricoSincronizacaoRepository historicoSincronizacaoRepository) {
         this.messageBroker = messageBroker;
+        this.notificacaoRepository = notificacaoRepository;
+        this.historicoSincronizacaoRepository = historicoSincronizacaoRepository;
+        // Inscreve-se nos tópicos relevantes para receber mensagens
         this.messageBroker.subscribe(MessageTopic.NOTIFICACAO_RECEBIDA, this::criarNotificacao);
         this.messageBroker.subscribe(MessageTopic.DADOS_OBTIDOS, this::atualizarNotificacao);
     } 
@@ -31,20 +37,32 @@ public class NotificacaoService {
         if (notificacaoRepository.findByHash(hash.toString()).isPresent()) {
             throw new IllegalArgumentException("Já existe uma notificação com o hash fornecido.");
         }
+        LocalDateTime dataNotificacao = LocalDateTime.now();
         // Cria uma nova instância de Notificacao
         Notificacao notificacao = new Notificacao();
         notificacao.setHash(hash.toString());
+        notificacao.setDataHoraNotificacao(dataNotificacao);
         // Salva a notificação no banco de dados
         notificacaoRepository.save(notificacao);
+
+        // Cria um histórico de sincronização
+        HistoricoSincronizacao historico = new HistoricoSincronizacao();
+        historico.setHash(hash.toString());
+        historico.setDataHora(dataNotificacao);
+        historico.setSituacao(SituacaoSincronizacaoEnum.PENDENTE_SINCRONIZACAO);
+        this.historicoSincronizacaoRepository.save(historico);
+
+
         this.messageBroker.publish(MessageTopic.DADOS_PENDENTES, hash);
     }
 
     private void atualizarNotificacao(Object onboardingDataDto) {
         OnboardingDataDto dto = (OnboardingDataDto) onboardingDataDto;
-        Optional<Notificacao> notificacaoOptional = notificacaoRepository.findByHash(dto.hash());
+        Optional<Notificacao> notificacaoOptional = notificacaoRepository.findByHash(dto.getHash());
         if (notificacaoOptional.isPresent()) {
             Notificacao notificacao = notificacaoOptional.get();
-            notificacao.setDataRecebimento(LocalDateTime.now());
+            notificacao.setSituacaoAtual(SituacaoSincronizacaoEnum.SUCESSO_SINCRONIZACAO);
+            notificacao.setDataHoraSincronizacao(LocalDateTime.now());
             notificacaoRepository.save(notificacao);
         } else {
             throw new IllegalArgumentException("Notificação não encontrada com o hash fornecido.");
@@ -53,7 +71,7 @@ public class NotificacaoService {
 
     public List<NotificacaoDTO> listarNotificacoesPendentes() {
         return notificacaoRepository
-                .findByDataRecebimentoIsNull()
+                .findByDataHoraSincronizacaoIsNull()
                 .stream()
                 .map(NotificacaoDTO::new)
                 .toList();

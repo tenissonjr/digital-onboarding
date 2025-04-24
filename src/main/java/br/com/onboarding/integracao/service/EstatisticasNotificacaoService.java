@@ -1,4 +1,4 @@
-package br.com.onboarding.integration.service;
+package br.com.onboarding.integracao.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,13 +10,12 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import br.com.onboarding.integration.dto.EstatisticasDTO;
-import br.com.onboarding.integration.dto.EstatisticasDTO.TimePeriodStats;
-import br.com.onboarding.integration.dto.EstatisticasParamDTO;
-import br.com.onboarding.integration.dto.EstatisticasParamDTO.TimeUnit;
-import br.com.onboarding.integration.enumeration.SituacaoHistoricoSincronizacao;
-import br.com.onboarding.integration.enumeration.SituacaoSincronizacao;
-import br.com.onboarding.integration.repository.HistoricoSincronizacaoRepository;
+import br.com.onboarding.integracao.dto.EstatisticasDTO;
+import br.com.onboarding.integracao.dto.EstatisticasParamDTO;
+import br.com.onboarding.integracao.dto.EstatisticasDTO.TimePeriodStats;
+import br.com.onboarding.integracao.dto.EstatisticasParamDTO.TimeUnit;
+import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
+import br.com.onboarding.integracao.repository.HistoricoSincronizacaoRepository;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 import br.com.onboarding.precadastro.service.PreCadastroService;
 
@@ -45,9 +44,9 @@ public class EstatisticasNotificacaoService {
         };
     }
 
-    private Map<SituacaoHistoricoSincronizacao, Long> obterEstatisticasSincronizacao(LocalDateTime startTime, LocalDateTime endTime) {
-        Map<SituacaoHistoricoSincronizacao, Long> estatisticas = new EnumMap<>(SituacaoHistoricoSincronizacao.class);
-        for (SituacaoHistoricoSincronizacao status : SituacaoHistoricoSincronizacao.values()) {
+    private Map<SituacaoSincronizacaoEnum, Long> obterEstatisticasSincronizacao(LocalDateTime startTime, LocalDateTime endTime) {
+        Map<SituacaoSincronizacaoEnum, Long> estatisticas = new EnumMap<>(SituacaoSincronizacaoEnum.class);
+        for (SituacaoSincronizacaoEnum status : SituacaoSincronizacaoEnum.values()) {
             long count = historicoSincronizacaoRepository.countBySituacaoAndDataHoraBetween(status, startTime, endTime);
             estatisticas.put(status, count);
         }
@@ -64,7 +63,7 @@ public class EstatisticasNotificacaoService {
             LocalDateTime startTime = calculateStartTime(now, param.unit(), i + 1);
             LocalDateTime endTime = calculateStartTime(now, param.unit(), i);
 
-            Map<SituacaoHistoricoSincronizacao, Long> totaisSituacaoSincronizacao = obterEstatisticasSincronizacao(startTime, endTime);
+            Map<SituacaoSincronizacaoEnum, Long> totaisSituacaoSincronizacao = obterEstatisticasSincronizacao(startTime, endTime);
             Map<SituacaoPreCadastro, Long> totaisSituacaoPreCadastro = preCadastroService.obterEstatisticasPreCadastro(startTime, endTime);
 
 

@@ -1,4 +1,4 @@
-package br.com.onboarding.integration.repository;
+package br.com.onboarding.integracao.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,9 +7,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.onboarding.integration.enumeration.SituacaoHistoricoSincronizacao;
-import br.com.onboarding.integration.enumeration.SituacaoSincronizacao;
-import br.com.onboarding.integration.model.HistoricoSincronizacao;
+import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
+import br.com.onboarding.integracao.model.HistoricoSincronizacao;
 
 @Repository
 public interface HistoricoSincronizacaoRepository extends JpaRepository<HistoricoSincronizacao, Long> {
@@ -22,9 +21,9 @@ public interface HistoricoSincronizacaoRepository extends JpaRepository<Historic
     /**
      * Busca todos os registros com determinado status
      */
-    List<HistoricoSincronizacao> findBySituacao(SituacaoHistoricoSincronizacao situacao);
+    List<HistoricoSincronizacao> findBySituacao(SituacaoSincronizacaoEnum situacao);
 
-    long countBySituacaoAndDataHoraBetween(SituacaoHistoricoSincronizacao status, LocalDateTime startTime,
+    long countBySituacaoAndDataHoraBetween(SituacaoSincronizacaoEnum status, LocalDateTime startTime,
             LocalDateTime endTime);
 
 }

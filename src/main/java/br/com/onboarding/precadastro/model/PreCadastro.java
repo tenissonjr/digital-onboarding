@@ -3,12 +3,9 @@ package br.com.onboarding.precadastro.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import br.com.onboarding.integration.dto.OnboardingDataDto;
+import br.com.onboarding.integracao.dto.OnboardingDataDto;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,8 +13,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,7 +26,10 @@ public class PreCadastro {
     @Column(unique = true, nullable = false)
     private String hash;
 
-    @Column(length = 14)
+    @Column(name = "jso_dados_originais")
+    private String dadosOriginais;
+
+    @Column(name = "num_cpf",length = 14)
     private String cpf;
 
     @Column(length = 200)
@@ -74,10 +72,6 @@ public class PreCadastro {
     @Column(name = "data_validacao")
     private LocalDateTime dataValidacao;
     
-    
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "onboarding_data_id")
-    private List<ValidacaoPreCadastro> validationErrors = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -93,6 +87,14 @@ public class PreCadastro {
 
     public void setHash(String hash) {
         this.hash = hash;
+    }
+
+    public String getDadosOriginais() {
+        return dadosOriginais;
+    }
+
+    public void setDadosOriginais(String dadosOriginais) {
+        this.dadosOriginais = dadosOriginais;
     }
 
     public String getCpf() {
@@ -199,15 +201,6 @@ public class PreCadastro {
         this.dataCadastro = dataRecebimento;
     }
 
-
-    public List<ValidacaoPreCadastro> getValidationErrors() {
-        return validationErrors;
-    }
-
-    public void setValidationErrors(List<ValidacaoPreCadastro> validationErrors) {
-        this.validationErrors = validationErrors;
-    }
-
     public LocalDateTime getDataValidacao() {
         return dataValidacao;
     }
@@ -217,26 +210,30 @@ public class PreCadastro {
     }
 
     
+
+    
     public static PreCadastro valueOf(OnboardingDataDto dto) {
         PreCadastro preCadastro = new PreCadastro();
-        preCadastro.setHash(dto.hash());
-        preCadastro.setCpf(dto.cpf());
-        preCadastro.setNome(dto.nome());
-        preCadastro.setNomeSocial(dto.nomeSocial());
-        preCadastro.setDataNascimento(dto.dataNascimento());
-        preCadastro.setNomeMae(dto.nomeMae());
-        preCadastro.setNumeroDocumento(dto.numeroDocumento());
-        preCadastro.setPaisOrigem(dto.paisOrigem());
-        preCadastro.setOrgaoEmissor(dto.orgaoEmissor());
-        preCadastro.setUf(dto.uf());
-        preCadastro.setDataExpedicao(dto.dataExpedicao());
-        preCadastro.setDataVencimento(dto.dataVencimento());
+        preCadastro.setHash(dto.getHash());
+        preCadastro.setDadosOriginais(dto.getDadosOriginais());
+        preCadastro.setCpf(dto.getCpf());
+        preCadastro.setNome(dto.getNome());
+        preCadastro.setNomeSocial(dto.getNomeSocial());
+        preCadastro.setDataNascimento(dto.getDataNascimento());
+        preCadastro.setNomeMae(dto.getNomeMae());
+        preCadastro.setNumeroDocumento(dto.getNumeroDocumento());
+        preCadastro.setPaisOrigem(dto.getPaisOrigem());
+        preCadastro.setOrgaoEmissor(dto.getOrgaoEmissor());
+        preCadastro.setUf(dto.getUf());
+        preCadastro.setDataExpedicao(dto.getDataExpedicao());
+        preCadastro.setDataVencimento(dto.getDataVencimento());
         preCadastro.setDataCadastro(LocalDateTime.now());
         preCadastro.setSituacao(SituacaoPreCadastro.PENDENTE_VALIDACAO);
 
 
         return  preCadastro;
     }
+
 
 
     

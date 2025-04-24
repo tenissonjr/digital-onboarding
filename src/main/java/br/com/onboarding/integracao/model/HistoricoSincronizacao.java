@@ -1,9 +1,9 @@
-package br.com.onboarding.integration.model;
+package br.com.onboarding.integracao.model;
 
 
 import java.time.LocalDateTime;
 
-import br.com.onboarding.integration.enumeration.SituacaoHistoricoSincronizacao;
+import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,7 +30,7 @@ public class HistoricoSincronizacao {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SituacaoHistoricoSincronizacao situacao;
+    private SituacaoSincronizacaoEnum situacao;
 
     @Column(name = "mensagem_erro", length = 1000)
     private String mensagemErro;
@@ -74,11 +74,11 @@ public class HistoricoSincronizacao {
         this.mensagemErro = mensagemErro;
     }
 
-    public SituacaoHistoricoSincronizacao getSituacao() {
+    public SituacaoSincronizacaoEnum getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(SituacaoHistoricoSincronizacao situacao) {
+    public void setSituacao(SituacaoSincronizacaoEnum situacao) {
         this.situacao = situacao;
     }
 

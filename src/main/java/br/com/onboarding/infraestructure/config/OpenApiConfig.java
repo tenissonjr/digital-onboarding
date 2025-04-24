@@ -17,7 +17,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
             .info(new Info()
-                .title("Digital Onboarding Integration API")
+                .title("Integra-Onboarding")
                 .version("1.0.0")
                 .description("API para integração com sistema de onboarding digital")
                 .contact(new Contact()

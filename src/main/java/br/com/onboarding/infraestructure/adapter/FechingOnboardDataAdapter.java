@@ -13,13 +13,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.onboarding.infraestructure.exception.OnboardingServiceException;
-import br.com.onboarding.integration.dto.OnboardingDataDto;
-import br.com.onboarding.integration.port.IFetchingOnboardDataService;
+import br.com.onboarding.infraestructure.exception.IntegracaoOnboardingServiceException;
+import br.com.onboarding.integracao.dto.OnboardingDataDto;
+import br.com.onboarding.integracao.port.IIntegracaoOnboardDigitalService;
 import io.swagger.v3.core.util.Json;
 
 @Service
-public class FechingOnboardDataAdapter implements IFetchingOnboardDataService {
+public class FechingOnboardDataAdapter implements IIntegracaoOnboardDigitalService {
 
     private static final Logger log = LoggerFactory.getLogger(FechingOnboardDataAdapter.class);
 
@@ -34,7 +34,7 @@ public class FechingOnboardDataAdapter implements IFetchingOnboardDataService {
 
 
     @Override
-    public OnboardingDataDto fetchOnboardingData(Object hash) throws OnboardingServiceException {
+    public OnboardingDataDto obterDadosPessoais(Object hash) throws IntegracaoOnboardingServiceException {
         
         String url = apiUrl + hash.toString();
         HttpClient httpClient = HttpClient.newBuilder()
@@ -67,7 +67,7 @@ public class FechingOnboardDataAdapter implements IFetchingOnboardDataService {
         }
         long totalTime = System.currentTimeMillis() - startTime;
         log.error("Todas as {} tentativas falharam ao buscar dados para hash: {}. Tempo total: {} ms", maxAttempts, hash, totalTime);
-        throw new OnboardingServiceException("Falha ao obter dados de onboarding após " + maxAttempts + " tentativas" + ".\n Erros: " + erros.toString());
+        throw new IntegracaoOnboardingServiceException("Falha ao obter dados de onboarding após " + maxAttempts + " tentativas" + ".\n Erros: " + erros.toString());
     }
 
     private HttpRequest buildHttpRequest(String url) {
@@ -83,19 +83,20 @@ public class FechingOnboardDataAdapter implements IFetchingOnboardDataService {
             Thread.sleep(delayTime * 1000L);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
-            throw new OnboardingServiceException("Thread interrompida durante o tempo de espera", ie);
+            throw new IntegracaoOnboardingServiceException("Thread interrompida durante o tempo de espera", ie);
         }
     }
 
     private OnboardingDataDto parseJsonToDto(String json) {
         try {
             OnboardingDataDto dto = Json.mapper().readValue(new StringReader(json), OnboardingDataDto.class);
+            dto.setDadosOriginais(json);
             log.info("Conversão de JSON para DTO realizada com sucesso.");
-            log.info("Dados convertidos::Nome => ", dto.nome());
+            log.info("Dados convertidos::Nome => ", dto.getNome());
             return dto;
         } catch (Exception e) {
             log.error("Erro ao converter JSON para DTO: {}", e.getMessage());
-            throw new OnboardingServiceException("Erro ao converter JSON para DTO", e);
+            throw new IntegracaoOnboardingServiceException("Erro ao converter JSON para DTO", e);
         }
     }
 

@@ -23,30 +23,23 @@ public class ValidacaoPreCadastro {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "onboarding_data_id", nullable = false)
-    private PreCadastro onboardingData;
+    @JoinColumn(name = "id_pre_cadastro", nullable = false)
+    private PreCadastro preCadastro;
+
+    @Column(name = "tim_validacao", nullable = false)
+    private LocalDateTime dataHoraValidacao;
 
     @Column(nullable = false)
     private String campo;
 
     @Column(nullable = false, length = 500)
     private String mensagem;
-
-    @Column(name = "data_registro", nullable = false)
-    private LocalDateTime dataRegistro;
     
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-    
-    @Column(name = "created_by", length = 100)
-    private String createdBy;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        createdBy = "tenissonjr"; // Current user
-        if (dataRegistro == null) {
-            dataRegistro = LocalDateTime.now();
+        if (dataHoraValidacao == null) {
+            dataHoraValidacao = LocalDateTime.now();
         }
     }
 
@@ -58,12 +51,12 @@ public class ValidacaoPreCadastro {
         this.id = id;
     }
 
-    public PreCadastro getOnboardingData() {
-        return onboardingData;
+    public PreCadastro getPreCadastro() {
+        return preCadastro;
     }
 
-    public void setOnboardingData(PreCadastro onboardingData) {
-        this.onboardingData = onboardingData;
+    public void setPreCadastro(PreCadastro onboardingData) {
+        this.preCadastro = onboardingData;
     }
 
     public String getCampo() {
@@ -82,28 +75,13 @@ public class ValidacaoPreCadastro {
         this.mensagem = mensagem;
     }
 
-    public LocalDateTime getDataRegistro() {
-        return dataRegistro;
+    public LocalDateTime getDataHoraValidacao() {
+        return dataHoraValidacao;
     }
 
-    public void setDataRegistro(LocalDateTime dataRegistro) {
-        this.dataRegistro = dataRegistro;
+    public void setDataHoraValidacao(LocalDateTime dataRegistro) {
+        this.dataHoraValidacao = dataRegistro;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
     
 }
