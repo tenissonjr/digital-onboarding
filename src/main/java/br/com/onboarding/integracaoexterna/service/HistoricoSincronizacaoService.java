@@ -1,12 +1,12 @@
-package br.com.onboarding.integracao.service;
+package br.com.onboarding.integracaoexterna.service;
 
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
-import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
-import br.com.onboarding.integracao.model.HistoricoSincronizacao;
-import br.com.onboarding.integracao.repository.HistoricoSincronizacaoRepository;
+import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
+import br.com.onboarding.integracaoexterna.model.HistoricoSincronizacao;
+import br.com.onboarding.integracaoexterna.repository.HistoricoSincronizacaoRepository;
 
 @Service
 public class HistoricoSincronizacaoService {

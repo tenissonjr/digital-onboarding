@@ -1,4 +1,4 @@
-package br.com.onboarding.integracao.enumeration;
+package br.com.onboarding.integracaoexterna.enumeration;
 
 public enum SituacaoSincronizacaoEnum {
     PENDENTE_SINCRONIZACAO,

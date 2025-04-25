@@ -1,10 +1,10 @@
-package br.com.onboarding.integracao.dto;
+package br.com.onboarding.integracaoexterna.dto;
 
 
 import java.util.List;
 import java.util.Map;
 
-import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
+import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 
 public class EstatisticasDTO {

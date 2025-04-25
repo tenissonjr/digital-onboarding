@@ -1,4 +1,4 @@
-package br.com.onboarding.integracao.controller;
+package br.com.onboarding.integracaoexterna.controller;
 
 import java.util.List;
 
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
-import br.com.onboarding.integracao.dto.EstatisticasDTO;
-import br.com.onboarding.integracao.dto.NoticacaoParamDTO;
-import br.com.onboarding.integracao.dto.NotificacaoDTO;
-import br.com.onboarding.integracao.service.EstatisticasNotificacaoService;
-import br.com.onboarding.integracao.service.NotificacaoService;
+import br.com.onboarding.integracaoexterna.dto.EstatisticasDTO;
+import br.com.onboarding.integracaoexterna.dto.NoticacaoParamDTO;
+import br.com.onboarding.integracaoexterna.dto.NotificacaoDTO;
+import br.com.onboarding.integracaoexterna.service.EstatisticasNotificacaoService;
+import br.com.onboarding.integracaoexterna.service.NotificacaoService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -65,7 +65,7 @@ public class NotificacaoController {
     }  
 
     @PostMapping("/estatisticas")
-    public ResponseEntity<EstatisticasDTO> gerarEstatisticas(@RequestBody br.com.onboarding.integracao.dto.EstatisticasParamDTO estatisticasParam) {
+    public ResponseEntity<EstatisticasDTO> gerarEstatisticas(@RequestBody br.com.onboarding.integracaoexterna.dto.EstatisticasParamDTO estatisticasParam) {
         return ResponseEntity.ok(estatisticasNotificacaoService.gerarEstatisticar(estatisticasParam));
     }
 

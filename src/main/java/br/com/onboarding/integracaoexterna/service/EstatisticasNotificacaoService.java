@@ -1,4 +1,4 @@
-package br.com.onboarding.integracao.service;
+package br.com.onboarding.integracaoexterna.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,12 +10,12 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import br.com.onboarding.integracao.dto.EstatisticasDTO;
-import br.com.onboarding.integracao.dto.EstatisticasParamDTO;
-import br.com.onboarding.integracao.dto.EstatisticasDTO.TimePeriodStats;
-import br.com.onboarding.integracao.dto.EstatisticasParamDTO.TimeUnit;
-import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
-import br.com.onboarding.integracao.repository.HistoricoSincronizacaoRepository;
+import br.com.onboarding.integracaoexterna.dto.EstatisticasDTO;
+import br.com.onboarding.integracaoexterna.dto.EstatisticasParamDTO;
+import br.com.onboarding.integracaoexterna.dto.EstatisticasDTO.TimePeriodStats;
+import br.com.onboarding.integracaoexterna.dto.EstatisticasParamDTO.TimeUnit;
+import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
+import br.com.onboarding.integracaoexterna.repository.HistoricoSincronizacaoRepository;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 import br.com.onboarding.precadastro.service.PreCadastroService;
 

@@ -1,8 +1,8 @@
-package br.com.onboarding.integracao.dto;
+package br.com.onboarding.integracaoexterna.dto;
 
 import java.time.LocalDateTime;
 
-import br.com.onboarding.integracao.model.Notificacao;
+import br.com.onboarding.integracaoexterna.model.Notificacao;
 
 public record NotificacaoDTO(
     String hash,

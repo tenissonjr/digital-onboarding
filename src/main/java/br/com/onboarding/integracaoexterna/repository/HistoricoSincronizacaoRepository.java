@@ -1,4 +1,4 @@
-package br.com.onboarding.integracao.repository;
+package br.com.onboarding.integracaoexterna.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
-import br.com.onboarding.integracao.model.HistoricoSincronizacao;
+import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
+import br.com.onboarding.integracaoexterna.model.HistoricoSincronizacao;
 
 @Repository
 public interface HistoricoSincronizacaoRepository extends JpaRepository<HistoricoSincronizacao, Long> {

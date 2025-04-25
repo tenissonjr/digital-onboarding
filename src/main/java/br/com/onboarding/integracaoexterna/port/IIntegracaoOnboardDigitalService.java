@@ -1,7 +1,7 @@
-package br.com.onboarding.integracao.port;
+package br.com.onboarding.integracaoexterna.port;
 
 import br.com.onboarding.infraestructure.exception.IntegracaoOnboardingServiceException;
-import br.com.onboarding.integracao.dto.valid.ValidOnboardingDataDTO;
+import br.com.onboarding.integracaoexterna.dto.valid.ValidOnboardingDataDTO;
 
 public interface IIntegracaoOnboardDigitalService {
 

@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import br.com.onboarding.infraestructure.exception.IntegracaoOnboardingServiceException;
-import br.com.onboarding.integracao.dto.valid.ValidOnboardingDataDTO;
-import br.com.onboarding.integracao.port.IIntegracaoOnboardDigitalService;
+import br.com.onboarding.integracaoexterna.dto.valid.ValidOnboardingDataDTO;
+import br.com.onboarding.integracaoexterna.port.IIntegracaoOnboardDigitalService;
 import io.swagger.v3.core.util.Json;
 
 @Service

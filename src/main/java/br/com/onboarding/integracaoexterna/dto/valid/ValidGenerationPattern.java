@@ -1,4 +1,4 @@
-package br.com.onboarding.integracao.dto.valid;
+package br.com.onboarding.integracaoexterna.dto.valid;
 
 public enum ValidGenerationPattern {
     CONSTANT,    // Generates at a constant rate throughout the minute

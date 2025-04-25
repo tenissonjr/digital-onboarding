@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
-import br.com.onboarding.integracao.dto.valid.ValidOnboardingDataDTO;
-import br.com.onboarding.integracao.service.HistoricoSincronizacaoService;
+import br.com.onboarding.integracaoexterna.dto.valid.ValidOnboardingDataDTO;
+import br.com.onboarding.integracaoexterna.service.HistoricoSincronizacaoService;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 import br.com.onboarding.precadastro.model.ErrosValidacaoPreCadastro;
 import br.com.onboarding.precadastro.model.PreCadastro;

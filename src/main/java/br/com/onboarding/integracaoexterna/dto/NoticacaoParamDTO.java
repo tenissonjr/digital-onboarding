@@ -1,4 +1,4 @@
-package br.com.onboarding.integracao.dto;
+package br.com.onboarding.integracaoexterna.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

@@ -4,10 +4,10 @@ package br.com.onboarding.precadastro.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import br.com.onboarding.integracao.dto.valid.ValidCaptureItemReportDTO;
-import br.com.onboarding.integracao.dto.valid.ValidCapturesReportDTO;
-import br.com.onboarding.integracao.dto.valid.ValidOcrDocumentReportDTO;
-import br.com.onboarding.integracao.dto.valid.ValidOnboardingDataDTO;
+import br.com.onboarding.integracaoexterna.dto.valid.ValidCaptureItemReportDTO;
+import br.com.onboarding.integracaoexterna.dto.valid.ValidCapturesReportDTO;
+import br.com.onboarding.integracaoexterna.dto.valid.ValidOcrDocumentReportDTO;
+import br.com.onboarding.integracaoexterna.dto.valid.ValidOnboardingDataDTO;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

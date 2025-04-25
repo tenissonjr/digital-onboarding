@@ -1,4 +1,4 @@
-package br.com.onboarding.integracao.service;
+package br.com.onboarding.integracaoexterna.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
-import br.com.onboarding.integracao.dto.NotificacaoDTO;
-import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
-import br.com.onboarding.integracao.model.Notificacao;
-import br.com.onboarding.integracao.repository.NotificacaoRepository;
+import br.com.onboarding.integracaoexterna.dto.NotificacaoDTO;
+import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
+import br.com.onboarding.integracaoexterna.model.Notificacao;
+import br.com.onboarding.integracaoexterna.repository.NotificacaoRepository;
 
 @Service
 public class NotificacaoService {

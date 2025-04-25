@@ -1,9 +1,9 @@
-package br.com.onboarding.integracao.model;
+package br.com.onboarding.integracaoexterna.model;
 
 
 import java.time.LocalDateTime;
 
-import br.com.onboarding.integracao.enumeration.SituacaoSincronizacaoEnum;
+import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

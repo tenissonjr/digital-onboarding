@@ -1,4 +1,4 @@
-package br.com.onboarding.integracao.service;
+package br.com.onboarding.integracaoexterna.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.onboarding.infraestructure.exception.IntegracaoOnboardingServiceException;
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
-import br.com.onboarding.integracao.dto.valid.ValidOnboardingDataDTO;
-import br.com.onboarding.integracao.port.IIntegracaoOnboardDigitalService;
+import br.com.onboarding.integracaoexterna.dto.valid.ValidOnboardingDataDTO;
+import br.com.onboarding.integracaoexterna.port.IIntegracaoOnboardDigitalService;
 
 @Service
 public class ObtencaoDadosService {
