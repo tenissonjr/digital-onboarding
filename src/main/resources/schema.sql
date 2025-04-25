@@ -31,7 +31,6 @@ CREATE INDEX idx_HISTORICO_SINCRONIZACAO_ONBOARDING_hash ON HISTORICO_SINCRONIZA
 CREATE TABLE PRECADASTRO (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     hash VARCHAR(64) UNIQUE NOT NULL,
-    jso_dados_originais JSON NOT NULL,
     num_cpf VARCHAR(14),
     nome VARCHAR(200),
     nome_social VARCHAR(200),
@@ -45,7 +44,8 @@ CREATE TABLE PRECADASTRO (
     data_vencimento DATE,
     situacao VARCHAR(60) NOT NULL,
     data_cadastro TIMESTAMP ,
-    data_validacao TIMESTAMP 
+    data_validacao TIMESTAMP ,
+    jso_dados_originais JSON NOT NULL
 
 );
 -- Add indexes

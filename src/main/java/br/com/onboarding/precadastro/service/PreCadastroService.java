@@ -1,4 +1,4 @@
- package br.com.onboarding.precadastro.service;
+package br.com.onboarding.precadastro.service;
 
 import java.time.LocalDateTime;
 import java.util.EnumMap;
@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
-import br.com.onboarding.integracao.dto.OnboardingDataDto;
+import br.com.onboarding.integracao.dto.valid.ValidOnboardingDataDTO;
+import br.com.onboarding.integracao.service.HistoricoSincronizacaoService;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 import br.com.onboarding.precadastro.model.PreCadastro;
 import br.com.onboarding.precadastro.repository.PreCadastroRepository;
@@ -16,23 +17,36 @@ import br.com.onboarding.precadastro.repository.PreCadastroRepository;
 @Service
 public class PreCadastroService {
 
+    private final IMessageBroker messageBroker;
     private final PreCadastroRepository preCadastroRepository;
+    private final HistoricoSincronizacaoService historicoSincronizacaoService;
 
-    public PreCadastroService(IMessageBroker messageBroker, PreCadastroRepository preCadastroRepository) {
+    public PreCadastroService(IMessageBroker messageBroker, PreCadastroRepository preCadastroRepository,
+            HistoricoSincronizacaoService historicoSincronizacaoService) {
+        this.messageBroker = messageBroker;
         this.preCadastroRepository = preCadastroRepository;
-        messageBroker.subscribe(MessageTopic.DADOS_OBTIDOS, this::criarPreCadastro);
+        this.historicoSincronizacaoService = historicoSincronizacaoService;
+        this.messageBroker.subscribe(MessageTopic.DADOS_OBTIDOS, this::criarPreCadastro);
     }
 
-    private PreCadastro criarPreCadastro(Object onboardingDataDto) {
+    private void criarPreCadastro(Object onboardingDataDto) {
 
-        OnboardingDataDto dto = (OnboardingDataDto) onboardingDataDto;
+        ValidOnboardingDataDTO validDto = (ValidOnboardingDataDTO) onboardingDataDto;
 
+        try {
+            // Cria uma nova instância de PreCadastro
+            PreCadastro preCadastro = PreCadastro.valueOf(validDto);
 
-        // Cria uma nova instância de PreCadastro
-        PreCadastro preCadastro =PreCadastro.valueOf(dto);
+            // Salva o PreCadastro no banco de dados
+            preCadastroRepository.save(preCadastro);
 
-        // Salva o PreCadastro no banco de dados
-        return preCadastroRepository.save(preCadastro);
+            this.messageBroker.publish(MessageTopic.DADOS_SINCRONIZADOS, validDto.getHash());
+
+        } catch (Exception e) {
+            // Lidar com exceções específicas, se necessário
+            historicoSincronizacaoService.registrarFalhaSincronizacao(validDto.getHash(), e.getMessage());
+        }
+
     }
 
     public Map<SituacaoPreCadastro, Long> obterEstatisticasPreCadastro(LocalDateTime startTime, LocalDateTime endTime) {

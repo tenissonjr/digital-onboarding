@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import br.com.onboarding.infraestructure.exception.IntegracaoOnboardingServiceException;
-import br.com.onboarding.integracao.dto.OnboardingDataDto;
+import br.com.onboarding.integracao.dto.valid.ValidOnboardingDataDTO;
 import br.com.onboarding.integracao.port.IIntegracaoOnboardDigitalService;
 import io.swagger.v3.core.util.Json;
 
@@ -34,7 +34,7 @@ public class FechingOnboardDataAdapter implements IIntegracaoOnboardDigitalServi
 
 
     @Override
-    public OnboardingDataDto obterDadosPessoais(Object hash) throws IntegracaoOnboardingServiceException {
+    public ValidOnboardingDataDTO obterDadosPessoais(Object hash) throws IntegracaoOnboardingServiceException {
         
         String url = apiUrl + hash.toString();
         HttpClient httpClient = HttpClient.newBuilder()
@@ -87,12 +87,12 @@ public class FechingOnboardDataAdapter implements IIntegracaoOnboardDigitalServi
         }
     }
 
-    private OnboardingDataDto parseJsonToDto(String json) {
+    private ValidOnboardingDataDTO parseJsonToDto(String json) {
         try {
-            OnboardingDataDto dto = Json.mapper().readValue(new StringReader(json), OnboardingDataDto.class);
+            ValidOnboardingDataDTO dto = Json.mapper().readValue(new StringReader(json), ValidOnboardingDataDTO.class);
             dto.setDadosOriginais(json);
             log.info("Conversão de JSON para DTO realizada com sucesso.");
-            log.info("Dados convertidos::Nome => ", dto.getNome());
+            log.info("Dados convertidos::Nome => ", dto.getName(), " CPF => ", dto.getIdentifier(), " Email => ", dto.getEmailClient(), " Telefone => ", dto.getPhoneNumber(), " Data de início => ", dto.getDateStarted(), " Data de conclusão => ", dto.getDateCompleted(), " Duração => ", dto.getDateDuration(), " Plataforma de captura => ", dto.getCapturePlatform(), " Tipo de agendamento => ", dto.getScheduleType(), " Status do agendamento => ", dto.getScheduleStatus(), " Hora do agendamento => ", dto.getScheduleTime());
             return dto;
         } catch (Exception e) {
             log.error("Erro ao converter JSON para DTO: {}", e.getMessage());

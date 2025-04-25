@@ -4,7 +4,10 @@ package br.com.onboarding.precadastro.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import br.com.onboarding.integracao.dto.OnboardingDataDto;
+import br.com.onboarding.integracao.dto.valid.ValidCaptureItemReportDTO;
+import br.com.onboarding.integracao.dto.valid.ValidCapturesReportDTO;
+import br.com.onboarding.integracao.dto.valid.ValidOcrDocumentReportDTO;
+import br.com.onboarding.integracao.dto.valid.ValidOnboardingDataDTO;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -212,21 +215,37 @@ public class PreCadastro {
     
 
     
-    public static PreCadastro valueOf(OnboardingDataDto dto) {
+    public static PreCadastro valueOf(ValidOnboardingDataDTO validDto) {
         PreCadastro preCadastro = new PreCadastro();
-        preCadastro.setHash(dto.getHash());
-        preCadastro.setDadosOriginais(dto.getDadosOriginais());
-        preCadastro.setCpf(dto.getCpf());
-        preCadastro.setNome(dto.getNome());
-        preCadastro.setNomeSocial(dto.getNomeSocial());
-        preCadastro.setDataNascimento(dto.getDataNascimento());
-        preCadastro.setNomeMae(dto.getNomeMae());
-        preCadastro.setNumeroDocumento(dto.getNumeroDocumento());
+        preCadastro.setHash(validDto.getHash());
+        preCadastro.setDadosOriginais(validDto.getDadosOriginais());
+
+        if (validDto.getCapturesReport()==null ||validDto.getCapturesReport().isEmpty()) {   
+            return preCadastro;
+        }
+        ValidCapturesReportDTO captureReportProvaVida = validDto.getCapturesReport().get(0);
+        ValidCaptureItemReportDTO captureItemReportFace = captureReportProvaVida.getCaptureItemReport().get(0); 
+
+        ValidCapturesReportDTO captureReportDocumentos = validDto.getCapturesReport().get(1);
+        ValidCaptureItemReportDTO captureItemReportDocumentos = captureReportDocumentos.getCaptureItemReport().get(0);         
+        ValidOcrDocumentReportDTO dadosDocumento= captureItemReportDocumentos.getOcrDocumentReport();
+
+        preCadastro.setCpf(dadosDocumento.getCpf());
+        preCadastro.setNome(dadosDocumento.getDocumentName());
+
+        preCadastro.setDataNascimento(dadosDocumento.getData_de_nascimento());
+        preCadastro.setNomeMae(dadosDocumento.getFiliacao1());
+        preCadastro.setNumeroDocumento(dadosDocumento.getNumero_da_CNH());
+        /* 
         preCadastro.setPaisOrigem(dto.getPaisOrigem());
         preCadastro.setOrgaoEmissor(dto.getOrgaoEmissor());
         preCadastro.setUf(dto.getUf());
-        preCadastro.setDataExpedicao(dto.getDataExpedicao());
-        preCadastro.setDataVencimento(dto.getDataVencimento());
+         */
+
+         preCadastro.setDataExpedicao(dadosDocumento.getData_de_expedicao());
+         preCadastro.setDataVencimento(dadosDocumento.getData_de_validade());
+ 
+
         preCadastro.setDataCadastro(LocalDateTime.now());
         preCadastro.setSituacao(SituacaoPreCadastro.PENDENTE_VALIDACAO);
 
