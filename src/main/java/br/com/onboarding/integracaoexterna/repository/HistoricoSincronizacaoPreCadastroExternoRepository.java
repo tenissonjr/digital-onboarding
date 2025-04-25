@@ -8,20 +8,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
-import br.com.onboarding.integracaoexterna.model.HistoricoSincronizacao;
+import br.com.onboarding.integracaoexterna.model.HistoricoSincronizacaoPreCadastroExterno;
 
 @Repository
-public interface HistoricoSincronizacaoRepository extends JpaRepository<HistoricoSincronizacao, Long> {
+public interface HistoricoSincronizacaoPreCadastroExternoRepository extends JpaRepository<HistoricoSincronizacaoPreCadastroExterno, Long> {
 
     /**
      * Busca o histórico mais recente pelo hash
      */
-    Optional<HistoricoSincronizacao> findFirstByHashOrderByDataHoraDesc(String hash);
+    Optional<HistoricoSincronizacaoPreCadastroExterno> findFirstByHashOrderByDataHoraDesc(String hash);
 
     /**
      * Busca todos os registros com determinado status
      */
-    List<HistoricoSincronizacao> findBySituacao(SituacaoSincronizacaoEnum situacao);
+    List<HistoricoSincronizacaoPreCadastroExterno> findBySituacao(SituacaoSincronizacaoEnum situacao);
 
     long countBySituacaoAndDataHoraBetween(SituacaoSincronizacaoEnum status, LocalDateTime startTime,
             LocalDateTime endTime);

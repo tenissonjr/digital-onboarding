@@ -10,17 +10,17 @@ import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
 import br.com.onboarding.integracaoexterna.dto.NotificacaoDTO;
 import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
-import br.com.onboarding.integracaoexterna.model.Notificacao;
-import br.com.onboarding.integracaoexterna.repository.NotificacaoRepository;
+import br.com.onboarding.integracaoexterna.model.NotificacaoPreCadastroExterno;
+import br.com.onboarding.integracaoexterna.repository.NotificacaoPreCadastroExternoRepository;
 
 @Service
 public class NotificacaoService {
 
     private final IMessageBroker messageBroker;
-    private final NotificacaoRepository notificacaoRepository;
+    private final NotificacaoPreCadastroExternoRepository notificacaoRepository;
     private final HistoricoSincronizacaoService historicoSincronizacaoService;
     
-    public NotificacaoService( IMessageBroker messageBroker,NotificacaoRepository notificacaoRepository,HistoricoSincronizacaoService historicoSincronizacaoService) {
+    public NotificacaoService( IMessageBroker messageBroker,NotificacaoPreCadastroExternoRepository notificacaoRepository,HistoricoSincronizacaoService historicoSincronizacaoService) {
         this.messageBroker = messageBroker;
         this.notificacaoRepository = notificacaoRepository;
         this.historicoSincronizacaoService = historicoSincronizacaoService;
@@ -37,7 +37,7 @@ public class NotificacaoService {
         }
         LocalDateTime dataNotificacao = LocalDateTime.now();
         // Cria uma nova instância de Notificacao
-        Notificacao notificacao = new Notificacao();
+        NotificacaoPreCadastroExterno notificacao = new NotificacaoPreCadastroExterno();
         notificacao.setHash(hash.toString());
         notificacao.setDataHoraNotificacao(dataNotificacao);
         // Salva a notificação no banco de dados
@@ -51,9 +51,9 @@ public class NotificacaoService {
     }
 
     private void atualizarNotificacaoSincronizada(Object hash) {
-        Optional<Notificacao> notificacaoOptional = notificacaoRepository.findByHash(hash.toString());
+        Optional<NotificacaoPreCadastroExterno> notificacaoOptional = notificacaoRepository.findByHash(hash.toString());
         if (notificacaoOptional.isPresent()) {
-            Notificacao notificacao = notificacaoOptional.get();
+            NotificacaoPreCadastroExterno notificacao = notificacaoOptional.get();
             notificacao.setSituacaoAtual(SituacaoSincronizacaoEnum.SUCESSO_SINCRONIZACAO);
             notificacao.setDataHoraSincronizacao(LocalDateTime.now());
             notificacaoRepository.save(notificacao);

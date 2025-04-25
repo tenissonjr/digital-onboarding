@@ -5,20 +5,20 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
-import br.com.onboarding.integracaoexterna.model.HistoricoSincronizacao;
-import br.com.onboarding.integracaoexterna.repository.HistoricoSincronizacaoRepository;
+import br.com.onboarding.integracaoexterna.model.HistoricoSincronizacaoPreCadastroExterno;
+import br.com.onboarding.integracaoexterna.repository.HistoricoSincronizacaoPreCadastroExternoRepository;
 
 @Service
 public class HistoricoSincronizacaoService {
 
-    private final HistoricoSincronizacaoRepository historicoSincronizacaoRepository;
+    private final HistoricoSincronizacaoPreCadastroExternoRepository historicoSincronizacaoRepository;
 
-    public HistoricoSincronizacaoService(HistoricoSincronizacaoRepository historicoSincronizacaoRepository) {
+    public HistoricoSincronizacaoService(HistoricoSincronizacaoPreCadastroExternoRepository historicoSincronizacaoRepository) {
         this.historicoSincronizacaoRepository = historicoSincronizacaoRepository;
     }
 
     private void registrarHistorico(String hash, SituacaoSincronizacaoEnum situacao, String mensagemErro) {
-        HistoricoSincronizacao historico = new HistoricoSincronizacao();
+        HistoricoSincronizacaoPreCadastroExterno historico = new HistoricoSincronizacaoPreCadastroExterno();
         historico.setHash(hash);
         historico.setSituacao(situacao);
         historico.setMensagemErro(mensagemErro);

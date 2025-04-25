@@ -15,8 +15,8 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "HISTORICO_SINCRONIZACAO_ONBOARDING")
-public class HistoricoSincronizacao {
+@Table(name = "HISTORICO_SINCRONIZACAO_PRECADASTRO_EXTERNO")
+public class HistoricoSincronizacaoPreCadastroExterno {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

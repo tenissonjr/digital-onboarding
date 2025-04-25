@@ -13,8 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "NOTIFICACAO_ONBOARDING")
-public class Notificacao {
+@Table(name = "NOTIFICACAO_PRECADASTRO_EXTERNO")
+public class NotificacaoPreCadastroExterno {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

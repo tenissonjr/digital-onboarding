@@ -15,19 +15,19 @@ import br.com.onboarding.integracaoexterna.dto.EstatisticasParamDTO;
 import br.com.onboarding.integracaoexterna.dto.EstatisticasDTO.TimePeriodStats;
 import br.com.onboarding.integracaoexterna.dto.EstatisticasParamDTO.TimeUnit;
 import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
-import br.com.onboarding.integracaoexterna.repository.HistoricoSincronizacaoRepository;
+import br.com.onboarding.integracaoexterna.repository.HistoricoSincronizacaoPreCadastroExternoRepository;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 import br.com.onboarding.precadastro.service.PreCadastroService;
 
 @Service
 public class EstatisticasNotificacaoService {
 
-    private final HistoricoSincronizacaoRepository historicoSincronizacaoRepository;
+    private final HistoricoSincronizacaoPreCadastroExternoRepository historicoSincronizacaoRepository;
     private final PreCadastroService preCadastroService;
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-    public EstatisticasNotificacaoService(HistoricoSincronizacaoRepository historicoSincronizacaoRepository,
+    public EstatisticasNotificacaoService(HistoricoSincronizacaoPreCadastroExternoRepository historicoSincronizacaoRepository,
             PreCadastroService preCadastroService) {
 
         this.historicoSincronizacaoRepository = historicoSincronizacaoRepository;
