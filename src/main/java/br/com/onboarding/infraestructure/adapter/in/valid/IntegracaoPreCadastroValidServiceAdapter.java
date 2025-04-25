@@ -1,4 +1,4 @@
-package br.com.onboarding.infraestructure.adapter.valid;
+package br.com.onboarding.infraestructure.adapter.in.valid;
 
 import java.io.StringReader;
 import java.net.URI;
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.onboarding.infraestructure.adapter.valid.dto.ValidOnboardingDataDTO;
+import br.com.onboarding.infraestructure.adapter.in.valid.dto.ValidOnboardingDataDTO;
 import br.com.onboarding.infraestructure.exception.IntegracaoPreCadastroExternoException;
 import br.com.onboarding.integracaoexterna.port.IIntegracaoPreCadastroExternoService;
 import br.com.onboarding.integracaoexterna.port.IPreCadastroExterno;

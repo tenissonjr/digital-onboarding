@@ -18,6 +18,7 @@ import br.com.onboarding.integracaoexterna.model.NotificacaoPreCadastroExterno;
 import br.com.onboarding.integracaoexterna.port.IIntegracaoPreCadastroExternoService;
 import br.com.onboarding.integracaoexterna.port.IPreCadastroExterno;
 import br.com.onboarding.integracaoexterna.repository.NotificacaoPreCadastroExternoRepository;
+import br.com.onboarding.precadastro.model.PreCadastro;
 import br.com.onboarding.shared.dto.ErroSincronizacaoDTO;
 
 @Service
@@ -63,8 +64,11 @@ public class IntegracaoExternaService {
         this.messageBroker.publish(MessageTopic.DADOS_PRECADASTRO_EXTERNO_PENDENTE_SINCRONIZACAO, hash);
     }
 
-    private void atualizarNotificacaoSincronizada(Object hash) {
-        Optional<NotificacaoPreCadastroExterno> notificacaoOptional = notificacaoRepository.findByHash(hash.toString());
+    private void atualizarNotificacaoSincronizada(Object preCadastroObject) {
+        PreCadastro preCadastro = (PreCadastro) preCadastroObject;
+        String hash = preCadastro.getHash();
+
+        Optional<NotificacaoPreCadastroExterno> notificacaoOptional = notificacaoRepository.findByHash(hash);
         if (notificacaoOptional.isPresent()) {
             NotificacaoPreCadastroExterno notificacao = notificacaoOptional.get();
             notificacao.setSituacaoAtual(SituacaoSincronizacaoEnum.SUCESSO_SINCRONIZACAO);
@@ -72,7 +76,7 @@ public class IntegracaoExternaService {
             notificacaoRepository.save(notificacao);
 
             // Registra o histórico de sincronização
-            historicoSincronizacaoService.registrarSucessoSincronizacao(hash.toString());
+            historicoSincronizacaoService.registrarSucessoSincronizacao(hash);
 
         } else {
             throw new IllegalArgumentException("Notificação não encontrada com o hash fornecido.");

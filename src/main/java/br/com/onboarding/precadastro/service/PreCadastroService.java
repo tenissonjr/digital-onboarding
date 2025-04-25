@@ -50,7 +50,7 @@ public class PreCadastroService {
             // Salva o PreCadastro no banco de dados
             preCadastroRepository.save(preCadastro);
 
-            this.messageBroker.publish(MessageTopic.DADOS_PRE_CADASTRO_EXTERNO_SINCRONIZADOS, preCadastroExterno.getHash());
+            this.messageBroker.publish(MessageTopic.DADOS_PRE_CADASTRO_EXTERNO_SINCRONIZADOS, preCadastro);
 
             validarPreCadastro(preCadastro);
 

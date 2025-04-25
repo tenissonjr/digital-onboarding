@@ -1,11 +1,11 @@
-package br.com.onboarding.infraestructure.adapter.valid;
+package br.com.onboarding.infraestructure.adapter.in.valid;
 
 import java.time.LocalDate;
 
-import br.com.onboarding.infraestructure.adapter.valid.dto.ValidCaptureItemReportDTO;
-import br.com.onboarding.infraestructure.adapter.valid.dto.ValidCapturesReportDTO;
-import br.com.onboarding.infraestructure.adapter.valid.dto.ValidOcrDocumentReportDTO;
-import br.com.onboarding.infraestructure.adapter.valid.dto.ValidOnboardingDataDTO;
+import br.com.onboarding.infraestructure.adapter.in.valid.dto.ValidCaptureItemReportDTO;
+import br.com.onboarding.infraestructure.adapter.in.valid.dto.ValidCapturesReportDTO;
+import br.com.onboarding.infraestructure.adapter.in.valid.dto.ValidOcrDocumentReportDTO;
+import br.com.onboarding.infraestructure.adapter.in.valid.dto.ValidOnboardingDataDTO;
 import br.com.onboarding.integracaoexterna.port.IPreCadastroExterno;
 
 public class PreCadastroDadosValidAdapter implements IPreCadastroExterno{
