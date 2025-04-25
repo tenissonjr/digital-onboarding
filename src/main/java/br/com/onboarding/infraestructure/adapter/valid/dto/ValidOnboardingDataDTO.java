@@ -1,4 +1,4 @@
-package br.com.onboarding.integracaoexterna.dto.valid;
+package br.com.onboarding.infraestructure.adapter.valid.dto;
 
 import java.util.List;
 

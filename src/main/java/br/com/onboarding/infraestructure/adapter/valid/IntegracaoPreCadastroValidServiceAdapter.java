@@ -1,4 +1,4 @@
-package br.com.onboarding.infraestructure.adapter;
+package br.com.onboarding.infraestructure.adapter.valid;
 
 import java.io.StringReader;
 import java.net.URI;
@@ -13,15 +13,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.onboarding.infraestructure.exception.IntegracaoOnboardingServiceException;
-import br.com.onboarding.integracaoexterna.dto.valid.ValidOnboardingDataDTO;
-import br.com.onboarding.integracaoexterna.port.IIntegracaoOnboardDigitalService;
+import br.com.onboarding.infraestructure.adapter.valid.dto.ValidOnboardingDataDTO;
+import br.com.onboarding.infraestructure.exception.IntegracaoPreCadastroExternoException;
+import br.com.onboarding.integracaoexterna.port.IIntegracaoPreCadastroExternoService;
+import br.com.onboarding.integracaoexterna.port.IPreCadastroExterno;
 import io.swagger.v3.core.util.Json;
 
 @Service
-public class FechingOnboardDataAdapter implements IIntegracaoOnboardDigitalService {
+public class IntegracaoPreCadastroValidServiceAdapter implements IIntegracaoPreCadastroExternoService {
 
-    private static final Logger log = LoggerFactory.getLogger(FechingOnboardDataAdapter.class);
+    private static final Logger log = LoggerFactory.getLogger(IntegracaoPreCadastroValidServiceAdapter.class);
 
     @Value("${app.onboarding.api.url}")
     private String apiUrl;
@@ -34,7 +35,7 @@ public class FechingOnboardDataAdapter implements IIntegracaoOnboardDigitalServi
 
 
     @Override
-    public ValidOnboardingDataDTO obterDadosPessoais(Object hash) throws IntegracaoOnboardingServiceException {
+    public IPreCadastroExterno obterPreCadastroExterno(Object hash) throws IntegracaoPreCadastroExternoException {
         
         String url = apiUrl + hash.toString();
         HttpClient httpClient = HttpClient.newBuilder()
@@ -67,7 +68,7 @@ public class FechingOnboardDataAdapter implements IIntegracaoOnboardDigitalServi
         }
         long totalTime = System.currentTimeMillis() - startTime;
         log.error("Todas as {} tentativas falharam ao buscar dados para hash: {}. Tempo total: {} ms", maxAttempts, hash, totalTime);
-        throw new IntegracaoOnboardingServiceException("Falha ao obter dados de onboarding após " + maxAttempts + " tentativas" + ".\n Erros: " + erros.toString());
+        throw new IntegracaoPreCadastroExternoException("Falha ao obter dados de onboarding após " + maxAttempts + " tentativas" + ".\n Erros: " + erros.toString());
     }
 
     private HttpRequest buildHttpRequest(String url) {
@@ -83,20 +84,20 @@ public class FechingOnboardDataAdapter implements IIntegracaoOnboardDigitalServi
             Thread.sleep(delayTime * 1000L);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
-            throw new IntegracaoOnboardingServiceException("Thread interrompida durante o tempo de espera", ie);
+            throw new IntegracaoPreCadastroExternoException("Thread interrompida durante o tempo de espera", ie);
         }
     }
 
-    private ValidOnboardingDataDTO parseJsonToDto(String json) {
+    private IPreCadastroExterno parseJsonToDto(String json) {
         try {
             ValidOnboardingDataDTO dto = Json.mapper().readValue(new StringReader(json), ValidOnboardingDataDTO.class);
             dto.setDadosOriginais(json);
             log.info("Conversão de JSON para DTO realizada com sucesso.");
             log.info("Dados convertidos::Nome => ", dto.getName(), " CPF => ", dto.getIdentifier(), " Email => ", dto.getEmailClient(), " Telefone => ", dto.getPhoneNumber(), " Data de início => ", dto.getDateStarted(), " Data de conclusão => ", dto.getDateCompleted(), " Duração => ", dto.getDateDuration(), " Plataforma de captura => ", dto.getCapturePlatform(), " Tipo de agendamento => ", dto.getScheduleType(), " Status do agendamento => ", dto.getScheduleStatus(), " Hora do agendamento => ", dto.getScheduleTime());
-            return dto;
+            return new PreCadastroDadosValidAdapter(dto) ;
         } catch (Exception e) {
             log.error("Erro ao converter JSON para DTO: {}", e.getMessage());
-            throw new IntegracaoOnboardingServiceException("Erro ao converter JSON para DTO", e);
+            throw new IntegracaoPreCadastroExternoException("Erro ao converter JSON para DTO", e);
         }
     }
 

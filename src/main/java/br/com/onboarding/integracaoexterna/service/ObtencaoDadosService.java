@@ -5,11 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.onboarding.infraestructure.exception.IntegracaoOnboardingServiceException;
+import br.com.onboarding.infraestructure.exception.IntegracaoPreCadastroExternoException;
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
-import br.com.onboarding.integracaoexterna.dto.valid.ValidOnboardingDataDTO;
-import br.com.onboarding.integracaoexterna.port.IIntegracaoOnboardDigitalService;
+import br.com.onboarding.integracaoexterna.port.IIntegracaoPreCadastroExternoService;
+import br.com.onboarding.integracaoexterna.port.IPreCadastroExterno;
 
 @Service
 public class ObtencaoDadosService {
@@ -18,12 +18,12 @@ public class ObtencaoDadosService {
 
     private final IMessageBroker messageBroker;
 
-    private final IIntegracaoOnboardDigitalService fetchingOnboardDataService;
+    private final IIntegracaoPreCadastroExternoService fetchingOnboardDataService;
 
     private final HistoricoSincronizacaoService historicoSincronizacaoService;;
 
     public ObtencaoDadosService(IMessageBroker messageBroker,
-            IIntegracaoOnboardDigitalService fetchingOnboardDataService,
+            IIntegracaoPreCadastroExternoService fetchingOnboardDataService,
             HistoricoSincronizacaoService historicoSincronizacaoService) {
         this.fetchingOnboardDataService = fetchingOnboardDataService;
         this.messageBroker = messageBroker;
@@ -36,9 +36,9 @@ public class ObtencaoDadosService {
         String hashStr = hash.toString();
         log.info("Iniciando obtenção de dados de onboarding para o hash: {}", hashStr);
         try {
-            ValidOnboardingDataDTO dto = fetchingOnboardDataService.obterDadosPessoais(hash);
+            IPreCadastroExterno dto = fetchingOnboardDataService.obterPreCadastroExterno(hash);
             this.messageBroker.publish(MessageTopic.DADOS_OBTIDOS, dto);
-        } catch (IntegracaoOnboardingServiceException e) {
+        } catch (IntegracaoPreCadastroExternoException e) {
             log.error("Erro ao obter dados de onboarding para o hash {}: {}", hashStr, e.getMessage());
             historicoSincronizacaoService.registrarFalhaSincronizacao(hashStr, e.getMessage());
         } catch (Exception e) {

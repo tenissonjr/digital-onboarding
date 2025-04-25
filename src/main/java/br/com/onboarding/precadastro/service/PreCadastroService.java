@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
-import br.com.onboarding.integracaoexterna.dto.valid.ValidOnboardingDataDTO;
+import br.com.onboarding.integracaoexterna.port.IPreCadastroExterno;
 import br.com.onboarding.integracaoexterna.service.HistoricoSincronizacaoService;
 import br.com.onboarding.precadastro.enumeration.SituacaoPreCadastro;
 import br.com.onboarding.precadastro.model.ErrosValidacaoPreCadastro;
@@ -40,7 +40,7 @@ public class PreCadastroService {
 
     private void criarPreCadastro(Object onboardingDataDto) {
 
-        ValidOnboardingDataDTO validDto = (ValidOnboardingDataDTO) onboardingDataDto;
+        IPreCadastroExterno validDto = (IPreCadastroExterno) onboardingDataDto;
 
         try {
             // Cria uma nova instância de PreCadastro
