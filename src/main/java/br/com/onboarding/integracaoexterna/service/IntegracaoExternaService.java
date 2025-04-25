@@ -4,30 +4,43 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import br.com.onboarding.infraestructure.exception.IntegracaoPreCadastroExternoException;
 import br.com.onboarding.infraestructure.messaging.broker.IMessageBroker;
 import br.com.onboarding.infraestructure.messaging.broker.MessageTopic;
 import br.com.onboarding.integracaoexterna.dto.NotificacaoDTO;
 import br.com.onboarding.integracaoexterna.enumeration.SituacaoSincronizacaoEnum;
 import br.com.onboarding.integracaoexterna.model.NotificacaoPreCadastroExterno;
+import br.com.onboarding.integracaoexterna.port.IIntegracaoPreCadastroExternoService;
+import br.com.onboarding.integracaoexterna.port.IPreCadastroExterno;
 import br.com.onboarding.integracaoexterna.repository.NotificacaoPreCadastroExternoRepository;
+import br.com.onboarding.shared.dto.ErroSincronizacaoDTO;
 
 @Service
-public class NotificacaoService {
+public class IntegracaoExternaService {
 
     private final IMessageBroker messageBroker;
     private final NotificacaoPreCadastroExternoRepository notificacaoRepository;
     private final HistoricoSincronizacaoService historicoSincronizacaoService;
+    private final IIntegracaoPreCadastroExternoService integracaoPreCadastroExternoService;
     
-    public NotificacaoService( IMessageBroker messageBroker,NotificacaoPreCadastroExternoRepository notificacaoRepository,HistoricoSincronizacaoService historicoSincronizacaoService) {
+    private static final Logger log = LoggerFactory.getLogger(IntegracaoExternaService.class);
+
+    public IntegracaoExternaService( IMessageBroker messageBroker,NotificacaoPreCadastroExternoRepository notificacaoRepository,HistoricoSincronizacaoService historicoSincronizacaoService
+    , IIntegracaoPreCadastroExternoService integracaoPreCadastroExternoService) {
         this.messageBroker = messageBroker;
         this.notificacaoRepository = notificacaoRepository;
         this.historicoSincronizacaoService = historicoSincronizacaoService;
+        this.integracaoPreCadastroExternoService = integracaoPreCadastroExternoService;
         // Inscreve-se nos tópicos relevantes para receber mensagens
-        this.messageBroker.subscribe(MessageTopic.NOTIFICACAO_RECEBIDA, this::criarNotificacao);
-        this.messageBroker.subscribe(MessageTopic.DADOS_SINCRONIZADOS, this::atualizarNotificacaoSincronizada);
-
+        this.messageBroker.subscribe(MessageTopic.NOTIFICACAO_PRECADASTRO_EXTERNO, this::criarNotificacao);
+        this.messageBroker.subscribe(MessageTopic.DADOS_PRECADASTRO_EXTERNO_PENDENTE_SINCRONIZACAO, this::obterDadosOnboarding);
+        this.messageBroker.subscribe(MessageTopic.DADOS_PRE_CADASTRO_EXTERNO_SINCRONIZADOS, this::atualizarNotificacaoSincronizada);
+        this.messageBroker.subscribe(MessageTopic.FALHA_SINCRONIZACAO_PRECADASTRO_EXTERNO, this::registrarFalhaSincronizacao);
     } 
 
     private void criarNotificacao(Object hash) {
@@ -47,7 +60,7 @@ public class NotificacaoService {
         historicoSincronizacaoService.registrarPendenciaSincronizacao(hash.toString());
 
 
-        this.messageBroker.publish(MessageTopic.DADOS_PENDENTES, hash);
+        this.messageBroker.publish(MessageTopic.DADOS_PRECADASTRO_EXTERNO_PENDENTE_SINCRONIZACAO, hash);
     }
 
     private void atualizarNotificacaoSincronizada(Object hash) {
@@ -86,7 +99,28 @@ public class NotificacaoService {
     public void processarNotificacoesPendentes() {
         List<NotificacaoDTO> notificacoesPendentes = listarNotificacoesPendentes();
         for (NotificacaoDTO notificacao : notificacoesPendentes) {
-            messageBroker.publish(MessageTopic.DADOS_PENDENTES, notificacao.hash());
+            messageBroker.publish(MessageTopic.DADOS_PRECADASTRO_EXTERNO_PENDENTE_SINCRONIZACAO, notificacao.hash());
         }
+    }
+
+    @Transactional
+    public void obterDadosOnboarding(Object hash) {
+        String hashStr = hash.toString();
+        log.info("Iniciando obtenção de dados de onboarding para o hash: {}", hashStr);
+        try {
+            IPreCadastroExterno dto = integracaoPreCadastroExternoService.obterPreCadastroExterno(hash);
+            this.messageBroker.publish(MessageTopic.DADOS_PRE_CADASTRO_EXTERNO_OBTIDOS, dto);
+        } catch (IntegracaoPreCadastroExternoException e) {
+            log.error("Erro ao obter dados de onboarding para o hash {}: {}", hashStr, e.getMessage());
+            historicoSincronizacaoService.registrarFalhaSincronizacao(hashStr, e.getMessage());
+        } catch (Exception e) {
+            log.error("Erro inesperado ao obter dados de onboarding para o hash {}: {}", hashStr, e.getMessage(), e);
+            historicoSincronizacaoService.registrarFalhaSincronizacao(hashStr, "Erro inesperado: " + e.getMessage());
+        }
+    }    
+
+    private void registrarFalhaSincronizacao(Object erroSincronizacaoObject) {
+        ErroSincronizacaoDTO erroSincronizacaoDTO = (ErroSincronizacaoDTO) erroSincronizacaoObject;
+        historicoSincronizacaoService.registrarFalhaSincronizacao(erroSincronizacaoDTO.hash(), erroSincronizacaoDTO.erro());
     }
 }

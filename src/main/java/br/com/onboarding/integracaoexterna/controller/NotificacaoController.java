@@ -18,7 +18,7 @@ import br.com.onboarding.integracaoexterna.dto.EstatisticasDTO;
 import br.com.onboarding.integracaoexterna.dto.NoticacaoParamDTO;
 import br.com.onboarding.integracaoexterna.dto.NotificacaoDTO;
 import br.com.onboarding.integracaoexterna.service.EstatisticasNotificacaoService;
-import br.com.onboarding.integracaoexterna.service.NotificacaoService;
+import br.com.onboarding.integracaoexterna.service.IntegracaoExternaService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -28,11 +28,11 @@ public class NotificacaoController {
     private static final Logger log = LoggerFactory.getLogger(NotificacaoController.class);
     
     private final IMessageBroker messageBroker;
-    private final NotificacaoService notificacaoService;
+    private final IntegracaoExternaService notificacaoService;
     private final EstatisticasNotificacaoService estatisticasNotificacaoService;
 
 
-    public NotificacaoController(IMessageBroker messageBroker, NotificacaoService notificacaoService, EstatisticasNotificacaoService estatisticasNotificacaoService) {
+    public NotificacaoController(IMessageBroker messageBroker, IntegracaoExternaService notificacaoService, EstatisticasNotificacaoService estatisticasNotificacaoService) {
         this.notificacaoService = notificacaoService;
         this.messageBroker = messageBroker;
         this.estatisticasNotificacaoService = estatisticasNotificacaoService;
@@ -42,7 +42,7 @@ public class NotificacaoController {
     public ResponseEntity<Void> receberNotificacao(@Valid @RequestBody NoticacaoParamDTO notification) {
 
         log.info("Recebida notificação com hash =" + notification.hash());
-        messageBroker.publish(MessageTopic.NOTIFICACAO_RECEBIDA, notification.hash());
+        messageBroker.publish(MessageTopic.NOTIFICACAO_PRECADASTRO_EXTERNO, notification.hash());
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).build(); 
     }  
