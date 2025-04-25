@@ -29,8 +29,6 @@ public class PreCadastro {
     @Column(unique = true, nullable = false)
     private String hash;
 
-    @Column(name = "jso_dados_originais")
-    private String dadosOriginais;
 
     @Column(name = "num_cpf",length = 14)
     private String cpf;
@@ -74,6 +72,9 @@ public class PreCadastro {
 
     @Column(name = "data_validacao")
     private LocalDateTime dataValidacao;
+
+    @Column(name = "jso_dados_originais")
+    private String dadosOriginais;
     
 
     public Long getId() {
@@ -251,6 +252,18 @@ public class PreCadastro {
 
 
         return  preCadastro;
+    }
+
+    public PreCadastro registrarSituacaoSucessoValidacao() {
+        setSituacao(SituacaoPreCadastro.VALIDADO_SUCESSO);
+        setDataValidacao(LocalDateTime.now());
+        return this;
+    }
+
+    public PreCadastro registrarSituacaoErroValidacao() {
+        setSituacao(SituacaoPreCadastro.VALIDADO_COM_ERROS);
+        setDataValidacao(LocalDateTime.now());
+        return this;
     }
 
 

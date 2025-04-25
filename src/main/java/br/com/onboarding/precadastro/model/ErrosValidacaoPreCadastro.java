@@ -15,8 +15,8 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name = "VALIDACAO_PRECADASTRO")
-public class ValidacaoPreCadastro {
+@Table(name = "ERROS_VALIDACAO_PRECADASTRO")
+public class ErrosValidacaoPreCadastro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +42,18 @@ public class ValidacaoPreCadastro {
             dataHoraValidacao = LocalDateTime.now();
         }
     }
+
+    
+    public ErrosValidacaoPreCadastro() {
+    }
+
+
+    public ErrosValidacaoPreCadastro(PreCadastro preCadastro, String campo, String mensagem) {
+        this.preCadastro = preCadastro;
+        this.campo = campo;
+        this.mensagem = mensagem;
+    }
+
 
     public Long getId() {
         return id;
